@@ -156,6 +156,10 @@ body::before{
 #googleSignInBtn{
   background:white;
   color:#1f2937;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
 }
 
 .email-btn,
@@ -195,6 +199,12 @@ body::before{
   transform:translateY(-2px);
 }
 
+.google-icon{
+  width:20px;
+  height:20px;
+  z-index:1;
+}
+
 /* ===== INPUTS ===== */
 
 #emailAuth input{
@@ -227,16 +237,21 @@ body::before{
   color:var(--text2);
   cursor:pointer;
   transition:.3s;
+  font-size:14px;
 }
 
 .auth-tab.active,
 .email-subtab.active{
   color:var(--accent);
   border-bottom:2px solid var(--accent);
-  transform:translateY(-2px);
 }
 
 /* ===== LOADING ===== */
+
+#loading{
+  display:none;
+  margin:20px 0;
+}
 
 .spinner{
   border:3px solid rgba(0,120,212,.2);
@@ -276,10 +291,23 @@ body::before{
   }
 }
 
-.error{
+#error{
+  display:none;
   color:#ef5350;
   font-size:12px;
   margin-top:10px;
+  padding:10px;
+  background:rgba(239,83,80,.1);
+  border-radius:4px;
+}
+
+#goToAppBtn,
+#logoutBtn{
+  margin-top:10px;
+}
+
+#logoutBtn{
+  margin-top:8px;
 }
 </style>
 </head>
@@ -292,8 +320,8 @@ body::before{
 
     <div style="margin-bottom: 20px;">
       <div style="display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid #404040; padding-bottom: 10px;">
-        <button id="tabGoogle" class="auth-tab active" onclick="switchAuthTab('google')">Google</button>
-        <button id="tabEmail" class="auth-tab" onclick="switchAuthTab('email')">Email</button>
+        <button id="tabGoogle" class="auth-tab active">Google</button>
+        <button id="tabEmail" class="auth-tab">Email</button>
       </div>
 
       <!-- GOOGLE AUTH -->
@@ -312,41 +340,40 @@ body::before{
       <!-- EMAIL AUTH -->
       <div id="emailAuth" style="display: none;">
         <div style="display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid #404040; padding-bottom: 10px;">
-          <button id="btnSignIn" class="email-subtab active" onclick="switchEmailMode('signin')">Iniciar sesión</button>
-          <button id="btnSignUp" class="email-subtab" onclick="switchEmailMode('signup')">Crear cuenta</button>
+          <button id="btnSignIn" class="email-subtab active">Iniciar sesión</button>
+          <button id="btnSignUp" class="email-subtab">Crear cuenta</button>
         </div>
 
         <div id="signInMode">
           <input id="emailInput" type="email" placeholder="correo@ejemplo.com" style="margin-bottom: 8px;">
           <input id="passwordInput" type="password" placeholder="Contraseña" style="margin-bottom: 8px;">
-          <button id="emailSignInBtn" class="email-btn" onclick="handleEmailSignIn()">Iniciar sesión</button>
+          <button id="emailSignInBtn" class="email-btn">Iniciar sesión</button>
         </div>
 
         <div id="signUpMode" style="display: none;">
           <input id="nameInput" type="text" placeholder="Tu nombre" style="margin-bottom: 8px;">
           <input id="emailSignUpInput" type="email" placeholder="correo@ejemplo.com" style="margin-bottom: 8px;">
           <input id="passwordSignUpInput" type="password" placeholder="Contraseña (mín. 6 caracteres)" style="margin-bottom: 8px;">
-          <button id="emailSignUpBtn" class="email-btn" onclick="handleEmailSignUp()">Crear cuenta</button>
+          <button id="emailSignUpBtn" class="email-btn">Crear cuenta</button>
         </div>
       </div>
     </div>
 
     <div id="authSection">
-
-      <div class="loading" id="loading">
+      <div id="loading">
         <div class="spinner"></div>
         <p style="margin-top: 10px; color: var(--text2); font-size: 12px;">Autenticando...</p>
       </div>
 
-      <div class="error" id="error"></div>
+      <div id="error"></div>
 
-      <div class="user-info" id="userInfo">
+      <div id="userInfo" class="user-info">
         <p>Bienvenido</p>
         <p><strong id="userName">Usuario</strong></p>
-        <p style="font-size: 11px; color: var(--text3); margin-top: 8px;" id="userEmail">correo@ejemplo.com</p>
+        <p style="font-size: 11px; color: var(--text2); margin-top: 8px;" id="userEmail">correo@ejemplo.com</p>
       </div>
 
-      <button id="goToAppBtn" style="display: none;">Ir a Quimilopia →</button>
+      <button id="goToAppBtn" class="email-btn" style="display: none;">Ir a Quimilopia →</button>
       <button id="logoutBtn" style="display: none;">Cerrar sesión</button>
     </div>
   </div>
@@ -392,13 +419,18 @@ body::before{
     const emailSignInBtn = document.getElementById('emailSignInBtn');
     const emailSignUpBtn = document.getElementById('emailSignUpBtn');
 
+    // Tabs
+    const tabGoogle = document.getElementById('tabGoogle');
+    const tabEmail = document.getElementById('tabEmail');
+    const googleAuth = document.getElementById('googleAuth');
+    const emailAuth = document.getElementById('emailAuth');
+    const btnSignIn = document.getElementById('btnSignIn');
+    const btnSignUp = document.getElementById('btnSignUp');
+    const signInMode = document.getElementById('signInMode');
+    const signUpMode = document.getElementById('signUpMode');
+
     // ─── FUNCIONES ──────────────────────────────────────────────────
     function switchAuthTab(tab) {
-      const googleAuth = document.getElementById('googleAuth');
-      const emailAuth = document.getElementById('emailAuth');
-      const tabGoogle = document.getElementById('tabGoogle');
-      const tabEmail = document.getElementById('tabEmail');
-
       if (tab === 'google') {
         googleAuth.style.display = 'block';
         emailAuth.style.display = 'none';
@@ -414,11 +446,6 @@ body::before{
     }
 
     function switchEmailMode(mode) {
-      const signInMode = document.getElementById('signInMode');
-      const signUpMode = document.getElementById('signUpMode');
-      const btnSignIn = document.getElementById('btnSignIn');
-      const btnSignUp = document.getElementById('btnSignUp');
-
       if (mode === 'signin') {
         signInMode.style.display = 'block';
         signUpMode.style.display = 'none';
@@ -449,7 +476,9 @@ body::before{
         email: user.email,
         photo: user.photoURL || null,
         lastAccess: new Date()
-      }, { merge: true });
+      }, { merge: true }).catch(error => {
+        console.error('Error guardando en Firestore:', error);
+      });
     }
 
     function saveUserToSession(user) {
@@ -475,6 +504,7 @@ body::before{
 
     function handleGoogleSignIn() {
       loading.style.display = 'block';
+      errorDiv.style.display = 'none';
       const provider = new firebase.auth.GoogleAuthProvider();
       
       auth.signInWithPopup(provider)
@@ -500,6 +530,7 @@ body::before{
       }
 
       loading.style.display = 'block';
+      errorDiv.style.display = 'none';
       emailSignInBtn.disabled = true;
 
       auth.signInWithEmailAndPassword(email, password)
@@ -541,6 +572,7 @@ body::before{
       }
 
       loading.style.display = 'block';
+      errorDiv.style.display = 'none';
       emailSignUpBtn.disabled = true;
 
       auth.createUserWithEmailAndPassword(email, password)
@@ -572,8 +604,8 @@ body::before{
     function handleLogout() {
       auth.signOut().then(() => {
         sessionStorage.removeItem('user');
-        document.getElementById('googleAuth').style.display = 'block';
-        document.getElementById('emailAuth').style.display = 'none';
+        googleAuth.style.display = 'block';
+        emailAuth.style.display = 'none';
         userInfo.style.display = 'none';
         goToAppBtn.style.display = 'none';
         logoutBtn.style.display = 'none';
@@ -582,10 +614,19 @@ body::before{
         nameInput.value = '';
         emailSignUpInput.value = '';
         passwordSignUpInput.value = '';
+        
+        // Reset tabs
+        switchAuthTab('google');
+        switchEmailMode('signin');
       });
     }
 
     // ─── EVENT LISTENERS ───────────────────────────────────────────
+    tabGoogle.addEventListener('click', () => switchAuthTab('google'));
+    tabEmail.addEventListener('click', () => switchAuthTab('email'));
+    btnSignIn.addEventListener('click', () => switchEmailMode('signin'));
+    btnSignUp.addEventListener('click', () => switchEmailMode('signup'));
+    
     googleSignInBtn.addEventListener('click', handleGoogleSignIn);
     emailSignInBtn.addEventListener('click', handleEmailSignIn);
     emailSignUpBtn.addEventListener('click', handleEmailSignUp);
@@ -601,6 +642,12 @@ body::before{
     passwordInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') handleEmailSignIn();
     });
+    nameInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleEmailSignUp();
+    });
+    emailSignUpInput.addEventListener('keypress', (e) => {
+      if (e.key === 'Enter') handleEmailSignUp();
+    });
     passwordSignUpInput.addEventListener('keypress', (e) => {
       if (e.key === 'Enter') handleEmailSignUp();
     });
@@ -609,9 +656,11 @@ body::before{
     auth.onAuthStateChanged(user => {
       if (user) {
         // Usuario ya está logueado
-        userName.textContent = user.displayName || 'Usuario';
+        userName.textContent = user.displayName || user.email.split('@')[0];
         userEmail.textContent = user.email;
-        googleSignInBtn.style.display = 'none';
+        googleAuth.style.display = 'none';
+        emailAuth.style.display = 'none';
+        loading.style.display = 'none';
         userInfo.style.display = 'block';
         goToAppBtn.style.display = 'block';
         logoutBtn.style.display = 'block';
@@ -624,14 +673,18 @@ body::before{
         }));
       } else {
         // Usuario no está logueado
-        googleSignInBtn.style.display = 'block';
+        googleAuth.style.display = 'block';
+        emailAuth.style.display = 'none';
+        loading.style.display = 'none';
         userInfo.style.display = 'none';
         goToAppBtn.style.display = 'none';
         logoutBtn.style.display = 'none';
       }
     });
+
+    // Inicializar tabs
+    switchAuthTab('google');
+    switchEmailMode('signin');
   </script>
 </body>
 </html>
-
-
