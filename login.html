@@ -7,330 +7,305 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@300;400;500;600&family=IBM+Plex+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-:root {
-  --bg: #1e1e1e;
-  --bg2: #252526;
-  --accent: #0078d4;
-  --accent-h: #1a8fe0;
-  --text: #cccccc;
-  --text2: #9d9d9d;
-  --white: #ffffff;
-}
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-}
+    :root {
+      --bg: #1e1e1e;
+      --bg2: #252526;
+      --accent: #0078d4;
+      --accent-h: #1a8fe0;
+      --text: #cccccc;
+      --text2: #9d9d9d;
+      --white: #ffffff;
+    }
 
-html,body{
-  height:100%;
-  background:var(--bg);
-  color:var(--text);
-  font-family:'IBM Plex Sans',sans-serif;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  animation:fadePage .8s ease;
-}
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { 
+      height: 100%; 
+      background: var(--bg); 
+      color: var(--text); 
+      font-family: 'IBM Plex Sans', sans-serif; 
+      display: flex; 
+      align-items: center; 
+      justify-content: center;
+    }
 
-/* ===== BACKGROUND ANIMADO ===== */
+    .login-container {
+      background: var(--bg2);
+      border: 1px solid #404040;
+      border-radius: 8px;
+      padding: 40px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+    }
 
-body::before{
-  content:"";
-  position:fixed;
-  inset:0;
-  background:
-    radial-gradient(circle at 20% 30%, rgba(0,120,212,.08), transparent 40%),
-    radial-gradient(circle at 80% 70%, rgba(0,120,212,.05), transparent 40%);
-  animation:bgMove 12s linear infinite alternate;
-  z-index:-1;
-}
+    .logo {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 32px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      letter-spacing: 1px;
+    }
 
-@keyframes bgMove{
-  from{transform:translateY(-20px)}
-  to{transform:translateY(20px)}
-}
+    .logo span {
+      color: var(--accent);
+    }
 
-/* ===== PAGE FADE ===== */
+    .subtitle {
+      color: var(--text2);
+      font-size: 12px;
+      margin-bottom: 30px;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
 
-@keyframes fadePage{
-  from{
-    opacity:0;
-    transform:scale(1.02);
-  }
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
-}
+    .divider {
+      height: 1px;
+      background: #404040;
+      margin: 20px 0;
+    }
 
-/* ===== LOGIN CARD ===== */
+    .login-text {
+      font-size: 14px;
+      margin-bottom: 20px;
+      color: var(--text);
+    }
 
-.login-container{
-  background:var(--bg2);
-  border:1px solid #404040;
-  border-radius:8px;
-  padding:40px;
-  box-shadow:0 4px 20px rgba(0,0,0,.6);
-  max-width:400px;
-  width:100%;
-  text-align:center;
+    #googleSignInBtn {
+      width: 100%;
+      height: 44px;
+      background: #ffffff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      font-weight: 500;
+      font-size: 14px;
+      color: #1f2937;
+      transition: background 0.2s;
+      margin-bottom: 15px;
+    }
 
-  animation:floatIn .7s cubic-bezier(.2,.8,.2,1);
-  transition:.3s;
-}
+    #googleSignInBtn:hover {
+      background: #f3f4f6;
+    }
 
-.login-container:hover{
-  transform:translateY(-4px);
-  box-shadow:0 10px 40px rgba(0,0,0,.8);
-}
+    #googleSignInBtn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-@keyframes floatIn{
-  from{
-    opacity:0;
-    transform:translateY(40px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
+    .google-icon {
+      width: 20px;
+      height: 20px;
+    }
 
-/* ===== LOGO ===== */
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 20px 0;
+    }
 
-.logo{
-  font-family:'IBM Plex Mono',monospace;
-  font-size:32px;
-  font-weight:600;
-  margin-bottom:10px;
-  letter-spacing:1px;
-}
+    .spinner {
+      border: 3px solid rgba(0, 120, 212, 0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
 
-.logo span{
-  color:var(--accent);
-  animation:glowPulse 2.5s infinite ease-in-out;
-}
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
 
-@keyframes glowPulse{
-  0%,100%{
-    text-shadow:0 0 5px rgba(0,120,212,.3);
-  }
-  50%{
-    text-shadow:
-      0 0 10px rgba(0,120,212,.6),
-      0 0 20px rgba(0,120,212,.4);
-  }
-}
+    .error {
+      color: #ef5350;
+      font-size: 12px;
+      margin-top: 10px;
+      display: none;
+    }
 
-.subtitle{
-  color:var(--text2);
-  font-size:12px;
-  margin-bottom:30px;
-  letter-spacing:.5px;
-  text-transform:uppercase;
-}
+    .user-info {
+      display: none;
+      text-align: left;
+      margin-top: 20px;
+      padding: 15px;
+      background: rgba(0, 120, 212, 0.1);
+      border-radius: 4px;
+      border: 1px solid rgba(0, 120, 212, 0.3);
+    }
 
-.divider{
-  height:1px;
-  background:#404040;
-  margin:20px 0;
-}
+    .user-info p {
+      font-size: 12px;
+      margin: 5px 0;
+      color: var(--text2);
+    }
 
-/* ===== BUTTONS ===== */
+    .user-info strong {
+      color: var(--white);
+      font-family: 'IBM Plex Mono', monospace;
+    }
 
-#googleSignInBtn,
-.email-btn,
-#goToAppBtn,
-#logoutBtn{
-  width:100%;
-  height:44px;
-  border:none;
-  border-radius:4px;
-  cursor:pointer;
-  font-weight:600;
-  position:relative;
-  overflow:hidden;
-  transition:.25s;
-}
+    #goToAppBtn {
+      width: 100%;
+      height: 44px;
+      background: var(--accent);
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 15px;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
 
-#googleSignInBtn{
-  background:white;
-  color:#1f2937;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:10px;
-}
+    #goToAppBtn:hover {
+      background: var(--accent-h);
+    }
 
-.email-btn,
-#goToAppBtn{
-  background:var(--accent);
-  color:white;
-}
+    #logoutBtn {
+      width: 100%;
+      height: 44px;
+      background: #555555;
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 10px;
+      font-size: 14px;
+      transition: background 0.2s;
+    }
 
-#logoutBtn{
-  background:#555;
-  color:white;
-}
+    #logoutBtn:hover {
+      background: #666666;
+    }
 
-#googleSignInBtn::after,
-.email-btn::after,
-#goToAppBtn::after{
-  content:"";
-  position:absolute;
-  width:0;
-  height:100%;
-  left:0;
-  top:0;
-  background:rgba(255,255,255,.15);
-  transition:.4s;
-}
+    .auth-tab {
+      flex: 1;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
 
-#googleSignInBtn:hover::after,
-.email-btn:hover::after,
-#goToAppBtn:hover::after{
-  width:100%;
-}
+    .auth-tab.active {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      margin-bottom: -10px;
+      padding-bottom: 18px;
+    }
 
-#googleSignInBtn:hover,
-.email-btn:hover,
-#goToAppBtn:hover,
-#logoutBtn:hover{
-  transform:translateY(-2px);
-}
+    .auth-tab:hover {
+      color: var(--text);
+    }
 
-.google-icon{
-  width:20px;
-  height:20px;
-  z-index:1;
-}
+    .email-subtab {
+      flex: 1;
+      padding: 6px 10px;
+      border: none;
+      background: transparent;
+      color: var(--text2);
+      cursor: pointer;
+      font-size: 12px;
+      transition: color 0.2s;
+    }
 
-/* ===== INPUTS ===== */
+    .email-subtab.active {
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      margin-bottom: -10px;
+      padding-bottom: 16px;
+    }
 
-#emailAuth input{
-  width:100%;
-  height:36px;
-  background:var(--bg);
-  border:1px solid #404040;
-  border-radius:4px;
-  color:var(--text);
-  padding:0 10px;
-  font-size:14px;
-  transition:.25s;
-  margin-bottom:8px;
-}
+    .email-subtab:hover {
+      color: var(--text);
+    }
 
-#emailAuth input:focus{
-  outline:none;
-  border-color:var(--accent);
-  box-shadow:0 0 10px rgba(0,120,212,.4);
-  transform:scale(1.02);
-}
+    #emailAuth input {
+      width: 100%;
+      height: 36px;
+      background: var(--bg);
+      border: 1px solid #404040;
+      border-radius: 4px;
+      color: var(--text);
+      padding: 0 10px;
+      font-size: 12px;
+      font-family: 'IBM Plex Sans', sans-serif;
+      transition: border-color 0.2s;
+    }
 
-/* ===== TABS ===== */
+    #emailAuth input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
 
-.auth-tab,
-.email-subtab{
-  flex:1;
-  padding:8px;
-  border:none;
-  background:transparent;
-  color:var(--text2);
-  cursor:pointer;
-  transition:.3s;
-  font-size:14px;
-}
+    #emailAuth input::placeholder {
+      color: var(--text2);
+    }
 
-.auth-tab.active,
-.email-subtab.active{
-  color:var(--accent);
-  border-bottom:2px solid var(--accent);
-}
+    .email-btn {
+      width: 100%;
+      height: 36px;
+      background: var(--accent);
+      border: none;
+      border-radius: 4px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+      transition: background 0.2s;
+    }
 
-/* ===== LOADING ===== */
+    .email-btn:hover {
+      background: var(--accent-h);
+    }
 
-#loading{
-  display:none;
-  margin:20px 0;
-}
+    .email-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
 
-.spinner{
-  border:3px solid rgba(0,120,212,.2);
-  border-top-color:var(--accent);
-  border-radius:50%;
-  width:30px;
-  height:30px;
-  animation:spin 1s linear infinite;
-  margin:auto;
-}
+    /* small interactions and panel transitions */
+    .auth-tab, .email-subtab {
+      transition: transform .14s ease, color .16s ease;
+    }
+    .auth-tab:active, .email-subtab:active {
+      transform: scale(.985);
+    }
 
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-/* ===== SUCCESS LOGIN ===== */
-
-.user-info{
-  display:none;
-  text-align:left;
-  margin-top:20px;
-  padding:15px;
-  background:rgba(0,120,212,.1);
-  border-radius:4px;
-  border:1px solid rgba(0,120,212,.3);
-  animation:successPop .5s ease;
-}
-
-@keyframes successPop{
-  from{
-    opacity:0;
-    transform:scale(.8);
-  }
-  to{
-    opacity:1;
-    transform:scale(1);
-  }
-}
-
-#error{
-  display:none;
-  color:#ef5350;
-  font-size:12px;
-  margin-top:10px;
-  padding:10px;
-  background:rgba(239,83,80,.1);
-  border-radius:4px;
-}
-
-#goToAppBtn,
-#logoutBtn{
-  margin-top:10px;
-  display:none;
-}
-
-#logoutBtn{
-  margin-top:8px;
-}
-
-.button-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-</style>
+    .tab-panel {
+      transition: transform .34s cubic-bezier(.2,.9,.2,1), opacity .24s ease;
+      will-change: transform, opacity;
+      opacity: 1;
+    }
+    .tab-panel.hidden { display: none !important; }
+    .tab-panel.enter { transform: translateY(8px); opacity: 0; }
+    .tab-panel.enter-active { transform: translateY(0); opacity: 1; }
+    .tab-panel.exit-active { transform: translateY(-8px); opacity: 0; }
+  </style>
 </head>
 <body>
   <div class="login-container">
     <div class="logo">Quimi<span>lopia</span></div>
-    <div class="subtitle">Atomic Simulator v3.4</div>
+    <div class="subtitle">Molecular Simulator v3.4</div>
     
     <div class="divider"></div>
 
-    <!-- Tabs principales -->
     <div style="margin-bottom: 20px;">
       <div style="display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid #404040; padding-bottom: 10px;">
-        <button id="tabGoogle" class="auth-tab active">Google</button>
-        <button id="tabEmail" class="auth-tab">Email</button>
+        <button id="tabGoogle" class="auth-tab active" onclick="switchAuthTab('google')">Google</button>
+        <button id="tabEmail" class="auth-tab" onclick="switchAuthTab('email')">Email</button>
       </div>
 
       <!-- GOOGLE AUTH -->
@@ -349,42 +324,42 @@ body::before{
       <!-- EMAIL AUTH -->
       <div id="emailAuth" style="display: none;">
         <div style="display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid #404040; padding-bottom: 10px;">
-          <button id="btnSignIn" class="email-subtab active">Iniciar sesión</button>
-          <button id="btnSignUp" class="email-subtab">Crear cuenta</button>
+          <button id="btnSignIn" class="email-subtab active" onclick="switchEmailMode('signin')">Iniciar sesión</button>
+          <button id="btnSignUp" class="email-subtab" onclick="switchEmailMode('signup')">Crear cuenta</button>
         </div>
 
         <div id="signInMode">
-          <input id="emailInput" type="email" placeholder="correo@ejemplo.com">
-          <input id="passwordInput" type="password" placeholder="Contraseña">
-          <button id="emailSignInBtn" class="email-btn">Iniciar sesión</button>
+          <input id="emailInput" type="email" placeholder="correo@ejemplo.com" style="margin-bottom: 8px;">
+          <input id="passwordInput" type="password" placeholder="Contraseña" style="margin-bottom: 8px;">
+          <button id="emailSignInBtn" class="email-btn" onclick="handleEmailSignIn()">Iniciar sesión</button>
         </div>
 
         <div id="signUpMode" style="display: none;">
-          <input id="nameInput" type="text" placeholder="Tu nombre">
-          <input id="emailSignUpInput" type="email" placeholder="correo@ejemplo.com">
-          <input id="passwordSignUpInput" type="password" placeholder="Contraseña (mín. 6 caracteres)">
-          <button id="emailSignUpBtn" class="email-btn">Crear cuenta</button>
+          <input id="nameInput" type="text" placeholder="Tu nombre" style="margin-bottom: 8px;">
+          <input id="emailSignUpInput" type="email" placeholder="correo@ejemplo.com" style="margin-bottom: 8px;">
+          <input id="passwordSignUpInput" type="password" placeholder="Contraseña (mín. 6 caracteres)" style="margin-bottom: 8px;">
+          <button id="emailSignUpBtn" class="email-btn" onclick="handleEmailSignUp()">Crear cuenta</button>
         </div>
       </div>
     </div>
 
-    <!-- Sección de autenticación -->
-    <div id="loading">
-      <div class="spinner"></div>
-      <p style="margin-top: 10px; color: var(--text2); font-size: 12px;">Autenticando...</p>
-    </div>
+    <div id="authSection">
 
-    <div id="error"></div>
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <p style="margin-top: 10px; color: var(--text2); font-size: 12px;">Autenticando...</p>
+      </div>
 
-    <div id="userInfo" class="user-info">
-      <p>Bienvenido</p>
-      <p><strong id="userName">Usuario</strong></p>
-      <p style="font-size: 11px; color: var(--text2); margin-top: 8px;" id="userEmail">correo@ejemplo.com</p>
-    </div>
+      <div class="error" id="error"></div>
 
-    <div class="button-group">
-      <button id="goToAppBtn" class="email-btn">Ir a Quimilopia →</button>
-      <button id="logoutBtn">Cerrar sesión</button>
+      <div class="user-info" id="userInfo">
+        <p>Bienvenido</p>
+        <p><strong id="userName">Usuario</strong></p>
+        <p style="font-size: 11px; color: var(--text3); margin-top: 8px;" id="userEmail">correo@ejemplo.com</p>
+      </div>
+
+      <button id="goToAppBtn" style="display: none;">Ir a Quimilopia →</button>
+      <button id="logoutBtn" style="display: none;">Cerrar sesión</button>
     </div>
   </div>
 
@@ -394,331 +369,265 @@ body::before{
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
 
   <script>
-    // Esperar a que el DOM esté completamente cargado
-    document.addEventListener('DOMContentLoaded', function() {
-      
-      // ─── CONFIGURACIÓN DE FIREBASE ───────────────────────────────────
-      // ⚠️ IMPORTANTE: Reemplaza estas credenciales con las tuyas de Firebase
-      const firebaseConfig = {
-        apiKey: "AIzaSyDemoKey1234567890",  // REEMPLAZA
-        authDomain: "your-project.firebaseapp.com",  // REEMPLAZA
-        projectId: "your-project-id",  // REEMPLAZA
-        storageBucket: "your-project.appspot.com",  // REEMPLAZA
-        messagingSenderId: "123456789",  // REEMPLAZA
-        appId: "1:123456789:web:abcdef1234567890"  // REEMPLAZA
-      };
+    // ─── CONFIGURACIÓN DE FIREBASE ───────────────────────────────────
+    // ⚠️ IMPORTANTE: Reemplaza estas credenciales con las tuyas de Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyAVLebejkwVp982deDRk04vver4uhZXopI",
+      authDomain: "quimilopia.firebaseapp.com",
+      projectId: "quimilopia",
+      storageBucket: "quimilopia.firebasestorage.app",
+      messagingSenderId: "803621135597",
+      appId: "1:803621135597:web:7ed3e68337b3fbdf0f98e4"
+    };
 
-      // Inicializar Firebase
-      firebase.initializeApp(firebaseConfig);
-      const auth = firebase.auth();
-      const db = firebase.firestore();
+    // Inicializar Firebase
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
 
-      // ─── ELEMENTOS DEL DOM ───────────────────────────────────────────
-      const googleSignInBtn = document.getElementById('googleSignInBtn');
-      const loading = document.getElementById('loading');
-      const errorDiv = document.getElementById('error');
-      const userInfo = document.getElementById('userInfo');
-      const userName = document.getElementById('userName');
-      const userEmail = document.getElementById('userEmail');
-      const goToAppBtn = document.getElementById('goToAppBtn');
-      const logoutBtn = document.getElementById('logoutBtn');
+    // ─── ELEMENTOS DEL DOM ───────────────────────────────────────────
+    const googleSignInBtn = document.getElementById('googleSignInBtn');
+    const loading = document.getElementById('loading');
+    const errorDiv = document.getElementById('error');
+    const userInfo = document.getElementById('userInfo');
+    const userName = document.getElementById('userName');
+    const userEmail = document.getElementById('userEmail');
+    const goToAppBtn = document.getElementById('goToAppBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
 
-      // Email inputs
-      const emailInput = document.getElementById('emailInput');
-      const passwordInput = document.getElementById('passwordInput');
-      const nameInput = document.getElementById('nameInput');
-      const emailSignUpInput = document.getElementById('emailSignUpInput');
-      const passwordSignUpInput = document.getElementById('passwordSignUpInput');
-      const emailSignInBtn = document.getElementById('emailSignInBtn');
-      const emailSignUpBtn = document.getElementById('emailSignUpBtn');
+    // Email inputs
+    const emailInput = document.getElementById('emailInput');
+    const passwordInput = document.getElementById('passwordInput');
+    const nameInput = document.getElementById('nameInput');
+    const emailSignUpInput = document.getElementById('emailSignUpInput');
+    const passwordSignUpInput = document.getElementById('passwordSignUpInput');
+    const emailSignInBtn = document.getElementById('emailSignInBtn');
+    const emailSignUpBtn = document.getElementById('emailSignUpBtn');
 
-      // Tabs
-      const tabGoogle = document.getElementById('tabGoogle');
-      const tabEmail = document.getElementById('tabEmail');
+    // ─── FUNCIONES ──────────────────────────────────────────────────
+    function switchAuthTab(tab) {
       const googleAuth = document.getElementById('googleAuth');
       const emailAuth = document.getElementById('emailAuth');
-      const btnSignIn = document.getElementById('btnSignIn');
-      const btnSignUp = document.getElementById('btnSignUp');
+      const tabGoogle = document.getElementById('tabGoogle');
+      const tabEmail = document.getElementById('tabEmail');
+
+      if (tab === 'google') {
+        googleAuth.style.display = 'block';
+        emailAuth.style.display = 'none';
+        tabGoogle.classList.add('active');
+        tabEmail.classList.remove('active');
+      } else {
+        googleAuth.style.display = 'none';
+        emailAuth.style.display = 'block';
+        tabGoogle.classList.remove('active');
+        tabEmail.classList.add('active');
+        emailInput.focus();
+      }
+    }
+
+    function switchEmailMode(mode) {
       const signInMode = document.getElementById('signInMode');
       const signUpMode = document.getElementById('signUpMode');
+      const btnSignIn = document.getElementById('btnSignIn');
+      const btnSignUp = document.getElementById('btnSignUp');
 
-      // Verificar que todos los elementos existen
-      console.log('Elementos cargados:', {
-        googleSignInBtn: !!googleSignInBtn,
-        emailSignInBtn: !!emailSignInBtn,
-        emailSignUpBtn: !!emailSignUpBtn,
-        tabGoogle: !!tabGoogle,
-        tabEmail: !!tabEmail
-      });
-
-      // ─── FUNCIONES ──────────────────────────────────────────────────
-      function switchAuthTab(tab) {
-        if (tab === 'google') {
-          googleAuth.style.display = 'block';
-          emailAuth.style.display = 'none';
-          tabGoogle.classList.add('active');
-          tabEmail.classList.remove('active');
-        } else {
-          googleAuth.style.display = 'none';
-          emailAuth.style.display = 'block';
-          tabGoogle.classList.remove('active');
-          tabEmail.classList.add('active');
-          if (emailInput) emailInput.focus();
-        }
+      if (mode === 'signin') {
+        signInMode.style.display = 'block';
+        signUpMode.style.display = 'none';
+        btnSignIn.classList.add('active');
+        btnSignUp.classList.remove('active');
+        emailInput.focus();
+      } else {
+        signInMode.style.display = 'none';
+        signUpMode.style.display = 'block';
+        btnSignIn.classList.remove('active');
+        btnSignUp.classList.add('active');
+        nameInput.focus();
       }
+    }
 
-      function switchEmailMode(mode) {
-        if (mode === 'signin') {
-          signInMode.style.display = 'block';
-          signUpMode.style.display = 'none';
-          btnSignIn.classList.add('active');
-          btnSignUp.classList.remove('active');
-          if (emailInput) emailInput.focus();
-        } else {
-          signInMode.style.display = 'none';
-          signUpMode.style.display = 'block';
-          btnSignIn.classList.remove('active');
-          btnSignUp.classList.add('active');
-          if (nameInput) nameInput.focus();
-        }
-      }
+    function showError(message) {
+      errorDiv.textContent = message;
+      errorDiv.style.display = 'block';
+      setTimeout(() => {
+        errorDiv.style.display = 'none';
+      }, 5000);
+    }
 
-      function showError(message) {
-        errorDiv.textContent = message;
-        errorDiv.style.display = 'block';
-        setTimeout(() => {
-          errorDiv.style.display = 'none';
-        }, 5000);
-      }
+    function saveUserToFirestore(user) {
+      db.collection('users').doc(user.uid).set({
+        uid: user.uid,
+        name: user.displayName || 'Usuario',
+        email: user.email,
+        photo: user.photoURL || null,
+        lastAccess: new Date()
+      }, { merge: true });
+    }
 
-      function saveUserToFirestore(user) {
-        db.collection('users').doc(user.uid).set({
-          uid: user.uid,
-          name: user.displayName || 'Usuario',
-          email: user.email,
-          photo: user.photoURL || null,
-          lastAccess: new Date()
-        }, { merge: true }).catch(error => {
-          console.error('Error guardando en Firestore:', error);
+    function saveUserToSession(user) {
+      sessionStorage.setItem('user', JSON.stringify({
+        uid: user.uid,
+        name: user.displayName || 'Usuario',
+        email: user.email,
+        photo: user.photoURL || null
+      }));
+    }
+
+    function showAuthSuccess(user) {
+      userName.textContent = user.displayName || user.email.split('@')[0];
+      userEmail.textContent = user.email;
+      
+      loading.style.display = 'none';
+      document.getElementById('googleAuth').style.display = 'none';
+      document.getElementById('emailAuth').style.display = 'none';
+      userInfo.style.display = 'block';
+      goToAppBtn.style.display = 'block';
+      logoutBtn.style.display = 'block';
+    }
+
+    function handleGoogleSignIn() {
+      loading.style.display = 'block';
+      const provider = new firebase.auth.GoogleAuthProvider();
+      
+      auth.signInWithPopup(provider)
+        .then(result => {
+          const user = result.user;
+          saveUserToFirestore(user);
+          saveUserToSession(user);
+          showAuthSuccess(user);
+        })
+        .catch(error => {
+          loading.style.display = 'none';
+          showError('Error con Google: ' + error.message);
         });
+    }
+
+    function handleEmailSignIn() {
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        showError('Por favor completa todos los campos');
+        return;
       }
 
-      function saveUserToSession(user) {
-        sessionStorage.setItem('user', JSON.stringify({
-          uid: user.uid,
-          name: user.displayName || 'Usuario',
-          email: user.email,
-          photo: user.photoURL || null
-        }));
+      loading.style.display = 'block';
+      emailSignInBtn.disabled = true;
+
+      auth.signInWithEmailAndPassword(email, password)
+        .then(result => {
+          const user = result.user;
+          saveUserToFirestore(user);
+          saveUserToSession(user);
+          showAuthSuccess(user);
+        })
+        .catch(error => {
+          loading.style.display = 'none';
+          emailSignInBtn.disabled = false;
+          
+          if (error.code === 'auth/user-not-found') {
+            showError('Usuario no encontrado');
+          } else if (error.code === 'auth/wrong-password') {
+            showError('Contraseña incorrecta');
+          } else if (error.code === 'auth/invalid-email') {
+            showError('Email inválido');
+          } else {
+            showError('Error: ' + error.message);
+          }
+        });
+    }
+
+    function handleEmailSignUp() {
+      const name = nameInput.value.trim();
+      const email = emailSignUpInput.value.trim();
+      const password = passwordSignUpInput.value;
+
+      if (!name || !email || !password) {
+        showError('Por favor completa todos los campos');
+        return;
       }
 
-      function showAuthSuccess(user) {
-        userName.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Usuario');
-        userEmail.textContent = user.email || 'Email no disponible';
-        
-        loading.style.display = 'none';
-        googleAuth.style.display = 'none';
-        emailAuth.style.display = 'none';
+      if (password.length < 6) {
+        showError('La contraseña debe tener al menos 6 caracteres');
+        return;
+      }
+
+      loading.style.display = 'block';
+      emailSignUpBtn.disabled = true;
+
+      auth.createUserWithEmailAndPassword(email, password)
+        .then(result => {
+          const user = result.user;
+          return user.updateProfile({ displayName: name }).then(() => user);
+        })
+        .then(user => {
+          saveUserToFirestore(user);
+          saveUserToSession(user);
+          showAuthSuccess(user);
+        })
+        .catch(error => {
+          loading.style.display = 'none';
+          emailSignUpBtn.disabled = false;
+
+          if (error.code === 'auth/email-already-in-use') {
+            showError('Este email ya está registrado');
+          } else if (error.code === 'auth/invalid-email') {
+            showError('Email inválido');
+          } else if (error.code === 'auth/weak-password') {
+            showError('Contraseña muy débil');
+          } else {
+            showError('Error: ' + error.message);
+          }
+        });
+    }
+
+    function handleLogout() {
+      auth.signOut().then(() => {
+        sessionStorage.removeItem('user');
+        document.getElementById('googleAuth').style.display = 'block';
+        document.getElementById('emailAuth').style.display = 'none';
+        userInfo.style.display = 'none';
+        goToAppBtn.style.display = 'none';
+        logoutBtn.style.display = 'none';
+        emailInput.value = '';
+        passwordInput.value = '';
+        nameInput.value = '';
+        emailSignUpInput.value = '';
+        passwordSignUpInput.value = '';
+      });
+    }
+
+    // ─── EVENT LISTENERS ───────────────────────────────────────────
+    googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+    goToAppBtn.addEventListener('click', () => {
+      window.location.href = 'index.html';
+    });
+    logoutBtn.addEventListener('click', handleLogout);
+
+    // ─── VERIFICAR SI YA ESTÁ LOGUEADO ─────────────────────────────
+    auth.onAuthStateChanged(user => {
+      if (user) {
+        // Usuario ya está logueado
+        userName.textContent = user.displayName || 'Usuario';
+        userEmail.textContent = user.email;
+        googleSignInBtn.style.display = 'none';
         userInfo.style.display = 'block';
         goToAppBtn.style.display = 'block';
         logoutBtn.style.display = 'block';
+
+        sessionStorage.setItem('user', JSON.stringify({
+          uid: user.uid,
+          name: user.displayName,
+          email: user.email,
+          photo: user.photoURL
+        }));
+      } else {
+        // Usuario no está logueado
+        googleSignInBtn.style.display = 'block';
+        userInfo.style.display = 'none';
+        goToAppBtn.style.display = 'none';
+        logoutBtn.style.display = 'none';
       }
-
-      function handleGoogleSignIn() {
-        loading.style.display = 'block';
-        errorDiv.style.display = 'none';
-        const provider = new firebase.auth.GoogleAuthProvider();
-        
-        auth.signInWithPopup(provider)
-          .then(result => {
-            const user = result.user;
-            saveUserToFirestore(user);
-            saveUserToSession(user);
-            showAuthSuccess(user);
-          })
-          .catch(error => {
-            loading.style.display = 'none';
-            showError('Error con Google: ' + error.message);
-          });
-      }
-
-      function handleEmailSignIn() {
-        const email = emailInput.value.trim();
-        const password = passwordInput.value;
-
-        if (!email || !password) {
-          showError('Por favor completa todos los campos');
-          return;
-        }
-
-        loading.style.display = 'block';
-        errorDiv.style.display = 'none';
-        emailSignInBtn.disabled = true;
-
-        auth.signInWithEmailAndPassword(email, password)
-          .then(result => {
-            const user = result.user;
-            saveUserToFirestore(user);
-            saveUserToSession(user);
-            showAuthSuccess(user);
-          })
-          .catch(error => {
-            loading.style.display = 'none';
-            emailSignInBtn.disabled = false;
-            
-            if (error.code === 'auth/user-not-found') {
-              showError('Usuario no encontrado');
-            } else if (error.code === 'auth/wrong-password') {
-              showError('Contraseña incorrecta');
-            } else if (error.code === 'auth/invalid-email') {
-              showError('Email inválido');
-            } else {
-              showError('Error: ' + error.message);
-            }
-          });
-      }
-
-      function handleEmailSignUp() {
-        const name = nameInput.value.trim();
-        const email = emailSignUpInput.value.trim();
-        const password = passwordSignUpInput.value;
-
-        if (!name || !email || !password) {
-          showError('Por favor completa todos los campos');
-          return;
-        }
-
-        if (password.length < 6) {
-          showError('La contraseña debe tener al menos 6 caracteres');
-          return;
-        }
-
-        loading.style.display = 'block';
-        errorDiv.style.display = 'none';
-        emailSignUpBtn.disabled = true;
-
-        auth.createUserWithEmailAndPassword(email, password)
-          .then(result => {
-            const user = result.user;
-            return user.updateProfile({ displayName: name }).then(() => user);
-          })
-          .then(user => {
-            saveUserToFirestore(user);
-            saveUserToSession(user);
-            showAuthSuccess(user);
-          })
-          .catch(error => {
-            loading.style.display = 'none';
-            emailSignUpBtn.disabled = false;
-
-            if (error.code === 'auth/email-already-in-use') {
-              showError('Este email ya está registrado');
-            } else if (error.code === 'auth/invalid-email') {
-              showError('Email inválido');
-            } else if (error.code === 'auth/weak-password') {
-              showError('Contraseña muy débil');
-            } else {
-              showError('Error: ' + error.message);
-            }
-          });
-      }
-
-      function handleLogout() {
-        auth.signOut().then(() => {
-          sessionStorage.removeItem('user');
-          googleAuth.style.display = 'block';
-          emailAuth.style.display = 'none';
-          userInfo.style.display = 'none';
-          goToAppBtn.style.display = 'none';
-          logoutBtn.style.display = 'none';
-          
-          // Limpiar inputs
-          if (emailInput) emailInput.value = '';
-          if (passwordInput) passwordInput.value = '';
-          if (nameInput) nameInput.value = '';
-          if (emailSignUpInput) emailSignUpInput.value = '';
-          if (passwordSignUpInput) passwordSignUpInput.value = '';
-          
-          // Reset tabs
-          switchAuthTab('google');
-          switchEmailMode('signin');
-        });
-      }
-
-      // ─── ASIGNAR EVENT LISTENERS ─────────────────────────────────────
-      if (tabGoogle) tabGoogle.addEventListener('click', () => switchAuthTab('google'));
-      if (tabEmail) tabEmail.addEventListener('click', () => switchAuthTab('email'));
-      if (btnSignIn) btnSignIn.addEventListener('click', () => switchEmailMode('signin'));
-      if (btnSignUp) btnSignUp.addEventListener('click', () => switchEmailMode('signup'));
-      
-      if (googleSignInBtn) googleSignInBtn.addEventListener('click', handleGoogleSignIn);
-      if (emailSignInBtn) emailSignInBtn.addEventListener('click', handleEmailSignIn);
-      if (emailSignUpBtn) emailSignUpBtn.addEventListener('click', handleEmailSignUp);
-      if (goToAppBtn) goToAppBtn.addEventListener('click', () => {
-        window.location.href = 'index.html';
-      });
-      if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
-
-      // Permitir Enter en los campos
-      if (emailInput) {
-        emailInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleEmailSignIn();
-        });
-      }
-      if (passwordInput) {
-        passwordInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleEmailSignIn();
-        });
-      }
-      if (nameInput) {
-        nameInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleEmailSignUp();
-        });
-      }
-      if (emailSignUpInput) {
-        emailSignUpInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleEmailSignUp();
-        });
-      }
-      if (passwordSignUpInput) {
-        passwordSignUpInput.addEventListener('keypress', (e) => {
-          if (e.key === 'Enter') handleEmailSignUp();
-        });
-      }
-
-      // ─── VERIFICAR SI YA ESTÁ LOGUEADO ─────────────────────────────
-      auth.onAuthStateChanged(user => {
-        if (user) {
-          // Usuario ya está logueado
-          userName.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Usuario');
-          userEmail.textContent = user.email || 'Email no disponible';
-          googleAuth.style.display = 'none';
-          emailAuth.style.display = 'none';
-          loading.style.display = 'none';
-          userInfo.style.display = 'block';
-          goToAppBtn.style.display = 'block';
-          logoutBtn.style.display = 'block';
-
-          sessionStorage.setItem('user', JSON.stringify({
-            uid: user.uid,
-            name: user.displayName,
-            email: user.email,
-            photo: user.photoURL
-          }));
-        } else {
-          // Usuario no está logueado
-          googleAuth.style.display = 'block';
-          emailAuth.style.display = 'none';
-          loading.style.display = 'none';
-          userInfo.style.display = 'none';
-          goToAppBtn.style.display = 'none';
-          logoutBtn.style.display = 'none';
-        }
-      });
-
-      // Inicializar tabs
-      switchAuthTab('google');
-      switchEmailMode('signin');
     });
   </script>
 </body>
