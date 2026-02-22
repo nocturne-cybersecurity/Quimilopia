@@ -215,8 +215,9 @@ body::before{
   border-radius:4px;
   color:var(--text);
   padding:0 10px;
-  font-size:12px;
+  font-size:14px;
   transition:.25s;
+  margin-bottom:8px;
 }
 
 #emailAuth input:focus{
@@ -304,10 +305,17 @@ body::before{
 #goToAppBtn,
 #logoutBtn{
   margin-top:10px;
+  display:none;
 }
 
 #logoutBtn{
   margin-top:8px;
+}
+
+.button-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 </style>
 </head>
@@ -318,6 +326,7 @@ body::before{
     
     <div class="divider"></div>
 
+    <!-- Tabs principales -->
     <div style="margin-bottom: 20px;">
       <div style="display: flex; gap: 8px; margin-bottom: 15px; border-bottom: 1px solid #404040; padding-bottom: 10px;">
         <button id="tabGoogle" class="auth-tab active">Google</button>
@@ -345,36 +354,37 @@ body::before{
         </div>
 
         <div id="signInMode">
-          <input id="emailInput" type="email" placeholder="correo@ejemplo.com" style="margin-bottom: 8px;">
-          <input id="passwordInput" type="password" placeholder="Contraseña" style="margin-bottom: 8px;">
+          <input id="emailInput" type="email" placeholder="correo@ejemplo.com">
+          <input id="passwordInput" type="password" placeholder="Contraseña">
           <button id="emailSignInBtn" class="email-btn">Iniciar sesión</button>
         </div>
 
         <div id="signUpMode" style="display: none;">
-          <input id="nameInput" type="text" placeholder="Tu nombre" style="margin-bottom: 8px;">
-          <input id="emailSignUpInput" type="email" placeholder="correo@ejemplo.com" style="margin-bottom: 8px;">
-          <input id="passwordSignUpInput" type="password" placeholder="Contraseña (mín. 6 caracteres)" style="margin-bottom: 8px;">
+          <input id="nameInput" type="text" placeholder="Tu nombre">
+          <input id="emailSignUpInput" type="email" placeholder="correo@ejemplo.com">
+          <input id="passwordSignUpInput" type="password" placeholder="Contraseña (mín. 6 caracteres)">
           <button id="emailSignUpBtn" class="email-btn">Crear cuenta</button>
         </div>
       </div>
     </div>
 
-    <div id="authSection">
-      <div id="loading">
-        <div class="spinner"></div>
-        <p style="margin-top: 10px; color: var(--text2); font-size: 12px;">Autenticando...</p>
-      </div>
+    <!-- Sección de autenticación -->
+    <div id="loading">
+      <div class="spinner"></div>
+      <p style="margin-top: 10px; color: var(--text2); font-size: 12px;">Autenticando...</p>
+    </div>
 
-      <div id="error"></div>
+    <div id="error"></div>
 
-      <div id="userInfo" class="user-info">
-        <p>Bienvenido</p>
-        <p><strong id="userName">Usuario</strong></p>
-        <p style="font-size: 11px; color: var(--text2); margin-top: 8px;" id="userEmail">correo@ejemplo.com</p>
-      </div>
+    <div id="userInfo" class="user-info">
+      <p>Bienvenido</p>
+      <p><strong id="userName">Usuario</strong></p>
+      <p style="font-size: 11px; color: var(--text2); margin-top: 8px;" id="userEmail">correo@ejemplo.com</p>
+    </div>
 
-      <button id="goToAppBtn" class="email-btn" style="display: none;">Ir a Quimilopia →</button>
-      <button id="logoutBtn" style="display: none;">Cerrar sesión</button>
+    <div class="button-group">
+      <button id="goToAppBtn" class="email-btn">Ir a Quimilopia →</button>
+      <button id="logoutBtn">Cerrar sesión</button>
     </div>
   </div>
 
@@ -384,307 +394,332 @@ body::before{
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore.js"></script>
 
   <script>
-    // ─── CONFIGURACIÓN DE FIREBASE ───────────────────────────────────
-    // ⚠️ IMPORTANTE: Reemplaza estas credenciales con las tuyas de Firebase
-    const firebaseConfig = {
-      apiKey: "AIzaSyDemoKey1234567890",  // REEMPLAZA
-      authDomain: "your-project.firebaseapp.com",  // REEMPLAZA
-      projectId: "your-project-id",  // REEMPLAZA
-      storageBucket: "your-project.appspot.com",  // REEMPLAZA
-      messagingSenderId: "123456789",  // REEMPLAZA
-      appId: "1:123456789:web:abcdef1234567890"  // REEMPLAZA
-    };
+    // Esperar a que el DOM esté completamente cargado
+    document.addEventListener('DOMContentLoaded', function() {
+      
+      // ─── CONFIGURACIÓN DE FIREBASE ───────────────────────────────────
+      // ⚠️ IMPORTANTE: Reemplaza estas credenciales con las tuyas de Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyDemoKey1234567890",  // REEMPLAZA
+        authDomain: "your-project.firebaseapp.com",  // REEMPLAZA
+        projectId: "your-project-id",  // REEMPLAZA
+        storageBucket: "your-project.appspot.com",  // REEMPLAZA
+        messagingSenderId: "123456789",  // REEMPLAZA
+        appId: "1:123456789:web:abcdef1234567890"  // REEMPLAZA
+      };
 
-    // Inicializar Firebase
-    firebase.initializeApp(firebaseConfig);
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+      // Inicializar Firebase
+      firebase.initializeApp(firebaseConfig);
+      const auth = firebase.auth();
+      const db = firebase.firestore();
 
-    // ─── ELEMENTOS DEL DOM ───────────────────────────────────────────
-    const googleSignInBtn = document.getElementById('googleSignInBtn');
-    const loading = document.getElementById('loading');
-    const errorDiv = document.getElementById('error');
-    const userInfo = document.getElementById('userInfo');
-    const userName = document.getElementById('userName');
-    const userEmail = document.getElementById('userEmail');
-    const goToAppBtn = document.getElementById('goToAppBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
+      // ─── ELEMENTOS DEL DOM ───────────────────────────────────────────
+      const googleSignInBtn = document.getElementById('googleSignInBtn');
+      const loading = document.getElementById('loading');
+      const errorDiv = document.getElementById('error');
+      const userInfo = document.getElementById('userInfo');
+      const userName = document.getElementById('userName');
+      const userEmail = document.getElementById('userEmail');
+      const goToAppBtn = document.getElementById('goToAppBtn');
+      const logoutBtn = document.getElementById('logoutBtn');
 
-    // Email inputs
-    const emailInput = document.getElementById('emailInput');
-    const passwordInput = document.getElementById('passwordInput');
-    const nameInput = document.getElementById('nameInput');
-    const emailSignUpInput = document.getElementById('emailSignUpInput');
-    const passwordSignUpInput = document.getElementById('passwordSignUpInput');
-    const emailSignInBtn = document.getElementById('emailSignInBtn');
-    const emailSignUpBtn = document.getElementById('emailSignUpBtn');
+      // Email inputs
+      const emailInput = document.getElementById('emailInput');
+      const passwordInput = document.getElementById('passwordInput');
+      const nameInput = document.getElementById('nameInput');
+      const emailSignUpInput = document.getElementById('emailSignUpInput');
+      const passwordSignUpInput = document.getElementById('passwordSignUpInput');
+      const emailSignInBtn = document.getElementById('emailSignInBtn');
+      const emailSignUpBtn = document.getElementById('emailSignUpBtn');
 
-    // Tabs
-    const tabGoogle = document.getElementById('tabGoogle');
-    const tabEmail = document.getElementById('tabEmail');
-    const googleAuth = document.getElementById('googleAuth');
-    const emailAuth = document.getElementById('emailAuth');
-    const btnSignIn = document.getElementById('btnSignIn');
-    const btnSignUp = document.getElementById('btnSignUp');
-    const signInMode = document.getElementById('signInMode');
-    const signUpMode = document.getElementById('signUpMode');
+      // Tabs
+      const tabGoogle = document.getElementById('tabGoogle');
+      const tabEmail = document.getElementById('tabEmail');
+      const googleAuth = document.getElementById('googleAuth');
+      const emailAuth = document.getElementById('emailAuth');
+      const btnSignIn = document.getElementById('btnSignIn');
+      const btnSignUp = document.getElementById('btnSignUp');
+      const signInMode = document.getElementById('signInMode');
+      const signUpMode = document.getElementById('signUpMode');
 
-    // ─── FUNCIONES ──────────────────────────────────────────────────
-    function switchAuthTab(tab) {
-      if (tab === 'google') {
-        googleAuth.style.display = 'block';
-        emailAuth.style.display = 'none';
-        tabGoogle.classList.add('active');
-        tabEmail.classList.remove('active');
-      } else {
-        googleAuth.style.display = 'none';
-        emailAuth.style.display = 'block';
-        tabGoogle.classList.remove('active');
-        tabEmail.classList.add('active');
-        emailInput.focus();
-      }
-    }
-
-    function switchEmailMode(mode) {
-      if (mode === 'signin') {
-        signInMode.style.display = 'block';
-        signUpMode.style.display = 'none';
-        btnSignIn.classList.add('active');
-        btnSignUp.classList.remove('active');
-        emailInput.focus();
-      } else {
-        signInMode.style.display = 'none';
-        signUpMode.style.display = 'block';
-        btnSignIn.classList.remove('active');
-        btnSignUp.classList.add('active');
-        nameInput.focus();
-      }
-    }
-
-    function showError(message) {
-      errorDiv.textContent = message;
-      errorDiv.style.display = 'block';
-      setTimeout(() => {
-        errorDiv.style.display = 'none';
-      }, 5000);
-    }
-
-    function saveUserToFirestore(user) {
-      db.collection('users').doc(user.uid).set({
-        uid: user.uid,
-        name: user.displayName || 'Usuario',
-        email: user.email,
-        photo: user.photoURL || null,
-        lastAccess: new Date()
-      }, { merge: true }).catch(error => {
-        console.error('Error guardando en Firestore:', error);
+      // Verificar que todos los elementos existen
+      console.log('Elementos cargados:', {
+        googleSignInBtn: !!googleSignInBtn,
+        emailSignInBtn: !!emailSignInBtn,
+        emailSignUpBtn: !!emailSignUpBtn,
+        tabGoogle: !!tabGoogle,
+        tabEmail: !!tabEmail
       });
-    }
 
-    function saveUserToSession(user) {
-      sessionStorage.setItem('user', JSON.stringify({
-        uid: user.uid,
-        name: user.displayName || 'Usuario',
-        email: user.email,
-        photo: user.photoURL || null
-      }));
-    }
-
-    function showAuthSuccess(user) {
-      userName.textContent = user.displayName || user.email.split('@')[0];
-      userEmail.textContent = user.email;
-      
-      loading.style.display = 'none';
-      document.getElementById('googleAuth').style.display = 'none';
-      document.getElementById('emailAuth').style.display = 'none';
-      userInfo.style.display = 'block';
-      goToAppBtn.style.display = 'block';
-      logoutBtn.style.display = 'block';
-    }
-
-    function handleGoogleSignIn() {
-      loading.style.display = 'block';
-      errorDiv.style.display = 'none';
-      const provider = new firebase.auth.GoogleAuthProvider();
-      
-      auth.signInWithPopup(provider)
-        .then(result => {
-          const user = result.user;
-          saveUserToFirestore(user);
-          saveUserToSession(user);
-          showAuthSuccess(user);
-        })
-        .catch(error => {
-          loading.style.display = 'none';
-          showError('Error con Google: ' + error.message);
-        });
-    }
-
-    function handleEmailSignIn() {
-      const email = emailInput.value.trim();
-      const password = passwordInput.value;
-
-      if (!email || !password) {
-        showError('Por favor completa todos los campos');
-        return;
+      // ─── FUNCIONES ──────────────────────────────────────────────────
+      function switchAuthTab(tab) {
+        if (tab === 'google') {
+          googleAuth.style.display = 'block';
+          emailAuth.style.display = 'none';
+          tabGoogle.classList.add('active');
+          tabEmail.classList.remove('active');
+        } else {
+          googleAuth.style.display = 'none';
+          emailAuth.style.display = 'block';
+          tabGoogle.classList.remove('active');
+          tabEmail.classList.add('active');
+          if (emailInput) emailInput.focus();
+        }
       }
 
-      loading.style.display = 'block';
-      errorDiv.style.display = 'none';
-      emailSignInBtn.disabled = true;
-
-      auth.signInWithEmailAndPassword(email, password)
-        .then(result => {
-          const user = result.user;
-          saveUserToFirestore(user);
-          saveUserToSession(user);
-          showAuthSuccess(user);
-        })
-        .catch(error => {
-          loading.style.display = 'none';
-          emailSignInBtn.disabled = false;
-          
-          if (error.code === 'auth/user-not-found') {
-            showError('Usuario no encontrado');
-          } else if (error.code === 'auth/wrong-password') {
-            showError('Contraseña incorrecta');
-          } else if (error.code === 'auth/invalid-email') {
-            showError('Email inválido');
-          } else {
-            showError('Error: ' + error.message);
-          }
-        });
-    }
-
-    function handleEmailSignUp() {
-      const name = nameInput.value.trim();
-      const email = emailSignUpInput.value.trim();
-      const password = passwordSignUpInput.value;
-
-      if (!name || !email || !password) {
-        showError('Por favor completa todos los campos');
-        return;
+      function switchEmailMode(mode) {
+        if (mode === 'signin') {
+          signInMode.style.display = 'block';
+          signUpMode.style.display = 'none';
+          btnSignIn.classList.add('active');
+          btnSignUp.classList.remove('active');
+          if (emailInput) emailInput.focus();
+        } else {
+          signInMode.style.display = 'none';
+          signUpMode.style.display = 'block';
+          btnSignIn.classList.remove('active');
+          btnSignUp.classList.add('active');
+          if (nameInput) nameInput.focus();
+        }
       }
 
-      if (password.length < 6) {
-        showError('La contraseña debe tener al menos 6 caracteres');
-        return;
+      function showError(message) {
+        errorDiv.textContent = message;
+        errorDiv.style.display = 'block';
+        setTimeout(() => {
+          errorDiv.style.display = 'none';
+        }, 5000);
       }
 
-      loading.style.display = 'block';
-      errorDiv.style.display = 'none';
-      emailSignUpBtn.disabled = true;
-
-      auth.createUserWithEmailAndPassword(email, password)
-        .then(result => {
-          const user = result.user;
-          return user.updateProfile({ displayName: name }).then(() => user);
-        })
-        .then(user => {
-          saveUserToFirestore(user);
-          saveUserToSession(user);
-          showAuthSuccess(user);
-        })
-        .catch(error => {
-          loading.style.display = 'none';
-          emailSignUpBtn.disabled = false;
-
-          if (error.code === 'auth/email-already-in-use') {
-            showError('Este email ya está registrado');
-          } else if (error.code === 'auth/invalid-email') {
-            showError('Email inválido');
-          } else if (error.code === 'auth/weak-password') {
-            showError('Contraseña muy débil');
-          } else {
-            showError('Error: ' + error.message);
-          }
+      function saveUserToFirestore(user) {
+        db.collection('users').doc(user.uid).set({
+          uid: user.uid,
+          name: user.displayName || 'Usuario',
+          email: user.email,
+          photo: user.photoURL || null,
+          lastAccess: new Date()
+        }, { merge: true }).catch(error => {
+          console.error('Error guardando en Firestore:', error);
         });
-    }
+      }
 
-    function handleLogout() {
-      auth.signOut().then(() => {
-        sessionStorage.removeItem('user');
-        googleAuth.style.display = 'block';
-        emailAuth.style.display = 'none';
-        userInfo.style.display = 'none';
-        goToAppBtn.style.display = 'none';
-        logoutBtn.style.display = 'none';
-        emailInput.value = '';
-        passwordInput.value = '';
-        nameInput.value = '';
-        emailSignUpInput.value = '';
-        passwordSignUpInput.value = '';
+      function saveUserToSession(user) {
+        sessionStorage.setItem('user', JSON.stringify({
+          uid: user.uid,
+          name: user.displayName || 'Usuario',
+          email: user.email,
+          photo: user.photoURL || null
+        }));
+      }
+
+      function showAuthSuccess(user) {
+        userName.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Usuario');
+        userEmail.textContent = user.email || 'Email no disponible';
         
-        // Reset tabs
-        switchAuthTab('google');
-        switchEmailMode('signin');
-      });
-    }
-
-    // ─── EVENT LISTENERS ───────────────────────────────────────────
-    tabGoogle.addEventListener('click', () => switchAuthTab('google'));
-    tabEmail.addEventListener('click', () => switchAuthTab('email'));
-    btnSignIn.addEventListener('click', () => switchEmailMode('signin'));
-    btnSignUp.addEventListener('click', () => switchEmailMode('signup'));
-    
-    googleSignInBtn.addEventListener('click', handleGoogleSignIn);
-    emailSignInBtn.addEventListener('click', handleEmailSignIn);
-    emailSignUpBtn.addEventListener('click', handleEmailSignUp);
-    goToAppBtn.addEventListener('click', () => {
-      window.location.href = 'index.html';
-    });
-    logoutBtn.addEventListener('click', handleLogout);
-
-    // Permitir Enter en los campos de email
-    emailInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleEmailSignIn();
-    });
-    passwordInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleEmailSignIn();
-    });
-    nameInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleEmailSignUp();
-    });
-    emailSignUpInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleEmailSignUp();
-    });
-    passwordSignUpInput.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') handleEmailSignUp();
-    });
-
-    // ─── VERIFICAR SI YA ESTÁ LOGUEADO ─────────────────────────────
-    auth.onAuthStateChanged(user => {
-      if (user) {
-        // Usuario ya está logueado
-        userName.textContent = user.displayName || user.email.split('@')[0];
-        userEmail.textContent = user.email;
+        loading.style.display = 'none';
         googleAuth.style.display = 'none';
         emailAuth.style.display = 'none';
-        loading.style.display = 'none';
         userInfo.style.display = 'block';
         goToAppBtn.style.display = 'block';
         logoutBtn.style.display = 'block';
-
-        sessionStorage.setItem('user', JSON.stringify({
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-          photo: user.photoURL
-        }));
-      } else {
-        // Usuario no está logueado
-        googleAuth.style.display = 'block';
-        emailAuth.style.display = 'none';
-        loading.style.display = 'none';
-        userInfo.style.display = 'none';
-        goToAppBtn.style.display = 'none';
-        logoutBtn.style.display = 'none';
       }
-    });
 
-    // Inicializar tabs
-    switchAuthTab('google');
-    switchEmailMode('signin');
+      function handleGoogleSignIn() {
+        loading.style.display = 'block';
+        errorDiv.style.display = 'none';
+        const provider = new firebase.auth.GoogleAuthProvider();
+        
+        auth.signInWithPopup(provider)
+          .then(result => {
+            const user = result.user;
+            saveUserToFirestore(user);
+            saveUserToSession(user);
+            showAuthSuccess(user);
+          })
+          .catch(error => {
+            loading.style.display = 'none';
+            showError('Error con Google: ' + error.message);
+          });
+      }
+
+      function handleEmailSignIn() {
+        const email = emailInput.value.trim();
+        const password = passwordInput.value;
+
+        if (!email || !password) {
+          showError('Por favor completa todos los campos');
+          return;
+        }
+
+        loading.style.display = 'block';
+        errorDiv.style.display = 'none';
+        emailSignInBtn.disabled = true;
+
+        auth.signInWithEmailAndPassword(email, password)
+          .then(result => {
+            const user = result.user;
+            saveUserToFirestore(user);
+            saveUserToSession(user);
+            showAuthSuccess(user);
+          })
+          .catch(error => {
+            loading.style.display = 'none';
+            emailSignInBtn.disabled = false;
+            
+            if (error.code === 'auth/user-not-found') {
+              showError('Usuario no encontrado');
+            } else if (error.code === 'auth/wrong-password') {
+              showError('Contraseña incorrecta');
+            } else if (error.code === 'auth/invalid-email') {
+              showError('Email inválido');
+            } else {
+              showError('Error: ' + error.message);
+            }
+          });
+      }
+
+      function handleEmailSignUp() {
+        const name = nameInput.value.trim();
+        const email = emailSignUpInput.value.trim();
+        const password = passwordSignUpInput.value;
+
+        if (!name || !email || !password) {
+          showError('Por favor completa todos los campos');
+          return;
+        }
+
+        if (password.length < 6) {
+          showError('La contraseña debe tener al menos 6 caracteres');
+          return;
+        }
+
+        loading.style.display = 'block';
+        errorDiv.style.display = 'none';
+        emailSignUpBtn.disabled = true;
+
+        auth.createUserWithEmailAndPassword(email, password)
+          .then(result => {
+            const user = result.user;
+            return user.updateProfile({ displayName: name }).then(() => user);
+          })
+          .then(user => {
+            saveUserToFirestore(user);
+            saveUserToSession(user);
+            showAuthSuccess(user);
+          })
+          .catch(error => {
+            loading.style.display = 'none';
+            emailSignUpBtn.disabled = false;
+
+            if (error.code === 'auth/email-already-in-use') {
+              showError('Este email ya está registrado');
+            } else if (error.code === 'auth/invalid-email') {
+              showError('Email inválido');
+            } else if (error.code === 'auth/weak-password') {
+              showError('Contraseña muy débil');
+            } else {
+              showError('Error: ' + error.message);
+            }
+          });
+      }
+
+      function handleLogout() {
+        auth.signOut().then(() => {
+          sessionStorage.removeItem('user');
+          googleAuth.style.display = 'block';
+          emailAuth.style.display = 'none';
+          userInfo.style.display = 'none';
+          goToAppBtn.style.display = 'none';
+          logoutBtn.style.display = 'none';
+          
+          // Limpiar inputs
+          if (emailInput) emailInput.value = '';
+          if (passwordInput) passwordInput.value = '';
+          if (nameInput) nameInput.value = '';
+          if (emailSignUpInput) emailSignUpInput.value = '';
+          if (passwordSignUpInput) passwordSignUpInput.value = '';
+          
+          // Reset tabs
+          switchAuthTab('google');
+          switchEmailMode('signin');
+        });
+      }
+
+      // ─── ASIGNAR EVENT LISTENERS ─────────────────────────────────────
+      if (tabGoogle) tabGoogle.addEventListener('click', () => switchAuthTab('google'));
+      if (tabEmail) tabEmail.addEventListener('click', () => switchAuthTab('email'));
+      if (btnSignIn) btnSignIn.addEventListener('click', () => switchEmailMode('signin'));
+      if (btnSignUp) btnSignUp.addEventListener('click', () => switchEmailMode('signup'));
+      
+      if (googleSignInBtn) googleSignInBtn.addEventListener('click', handleGoogleSignIn);
+      if (emailSignInBtn) emailSignInBtn.addEventListener('click', handleEmailSignIn);
+      if (emailSignUpBtn) emailSignUpBtn.addEventListener('click', handleEmailSignUp);
+      if (goToAppBtn) goToAppBtn.addEventListener('click', () => {
+        window.location.href = 'index.html';
+      });
+      if (logoutBtn) logoutBtn.addEventListener('click', handleLogout);
+
+      // Permitir Enter en los campos
+      if (emailInput) {
+        emailInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleEmailSignIn();
+        });
+      }
+      if (passwordInput) {
+        passwordInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleEmailSignIn();
+        });
+      }
+      if (nameInput) {
+        nameInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleEmailSignUp();
+        });
+      }
+      if (emailSignUpInput) {
+        emailSignUpInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleEmailSignUp();
+        });
+      }
+      if (passwordSignUpInput) {
+        passwordSignUpInput.addEventListener('keypress', (e) => {
+          if (e.key === 'Enter') handleEmailSignUp();
+        });
+      }
+
+      // ─── VERIFICAR SI YA ESTÁ LOGUEADO ─────────────────────────────
+      auth.onAuthStateChanged(user => {
+        if (user) {
+          // Usuario ya está logueado
+          userName.textContent = user.displayName || (user.email ? user.email.split('@')[0] : 'Usuario');
+          userEmail.textContent = user.email || 'Email no disponible';
+          googleAuth.style.display = 'none';
+          emailAuth.style.display = 'none';
+          loading.style.display = 'none';
+          userInfo.style.display = 'block';
+          goToAppBtn.style.display = 'block';
+          logoutBtn.style.display = 'block';
+
+          sessionStorage.setItem('user', JSON.stringify({
+            uid: user.uid,
+            name: user.displayName,
+            email: user.email,
+            photo: user.photoURL
+          }));
+        } else {
+          // Usuario no está logueado
+          googleAuth.style.display = 'block';
+          emailAuth.style.display = 'none';
+          loading.style.display = 'none';
+          userInfo.style.display = 'none';
+          goToAppBtn.style.display = 'none';
+          logoutBtn.style.display = 'none';
+        }
+      });
+
+      // Inicializar tabs
+      switchAuthTab('google');
+      switchEmailMode('signin');
+    });
   </script>
 </body>
 </html>
