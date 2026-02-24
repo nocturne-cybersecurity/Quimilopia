@@ -23,43 +23,9 @@ Un simulador molecular **interactivo** y **educativo** que permite a estudiantes
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tuusuario/quimilopia.git
+git clone https://github.com/nocturne-cybersecurity/Quimilopia.git
 cd quimilopia
 ```
-
-### 2. Configurar Firebase
-
-1. Ve a [Firebase Console](https://console.firebase.google.com/)
-2. Crea un nuevo proyecto
-3. Habilita **Authentication** (Google y Email/Password)
-4. Crea una base de datos **Firestore**
-5. Copia tus credenciales en `login.html` (línea ~375):
-
-```javascript
-const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "tu-proyecto.firebaseapp.com",
-  projectId: "tu-proyecto",
-  storageBucket: "tu-proyecto.appspot.com",
-  messagingSenderId: "1234567890",
-  appId: "1:1234567890:web:abc123"
-};
-```
-
-### 3. Ejecutar Localmente
-
-```bash
-python flask.py
-```
-
-O usa un servidor HTTP simple:
-
-```bash
-python -m http.server 8000
-```
-
-Abre `http://localhost:8000` en tu navegador.
-
 ---
 
 ## 📖 Guía de Uso
@@ -87,13 +53,13 @@ En el panel **izquierdo**, busca elementos en la tabla periódica:
 
 **Opción A - Modo Automático "Auto-Reacción"**
 ```
-Clic en "⚡ Auto-Reacción" en la barra superior
+Clic en "Auto-Reacción" en la barra superior
 La simulación crea moléculas automáticamente
 ```
 
 **Opción B - Vinculación Manual**
 ```
-1. Clic en "⚡ Vincular Manual"
+1. Clic en "Vincular Manual"
 2. Clic en Átomo A
 3. Clic en Átomo B
 → Se crea un enlace entre ellos
@@ -247,38 +213,6 @@ service cloud.firestore {
   }
 }
 ```
-
----
-
-## 🚀 Despliegue en Netlify
-
-### Opción 1: Deploy Automático (Recomendado)
-
-1. Sube el repo a **GitHub**
-2. Ve a [Netlify](https://netlify.com) → Connect Repository
-3. Selecciona `quimilopia`
-4. Configuración:
-   - Build command: `echo 'Build complete'`
-   - Publish directory: `.` (raíz)
-5. Deploy → Done ✅
-
-### Opción 2: Deploy Manual
-
-```bash
-npm install -g netlify-cli
-netlify deploy --prod --dir=.
-```
-
-### Variables de Entorno en Netlify
-
-1. **Site settings** → **Build & deploy** → **Environment**
-2. Añade:
-   ```
-   FIREBASE_API_KEY=tu_api_key
-   FIREBASE_AUTH_DOMAIN=tu-proyecto.firebaseapp.com
-   FIREBASE_PROJECT_ID=tu-proyecto
-   ```
-
 ---
 
 ## 💻 Desarrollo
@@ -335,11 +269,6 @@ La simulación está en [script.js](static/script.js):
 sessionStorage.getItem('user')
 ```
 
-Si retorna `null`, el login falló. Verifica:
-- ✅ Firebase está correctamente configurado
-- ✅ Las credenciales en `login.html` son válidas
-- ✅ Authentication está habilitada en Firebase
-
 ### Canvas en blanco
 
 ```javascript
@@ -361,10 +290,6 @@ Verifica las reglas de seguridad en Firestore Console:
 // Temporalmente en pruebas, puedes usar:
 allow read, write: if true;
 ```
-
-⚠️ **Cambiar a reglas restrictivas en producción**
-
----
 
 ## 🎓 Casos de Uso Educativo
 
@@ -411,15 +336,14 @@ Este proyecto está bajo licencia **MIT**. Eres libre de usar, modificar y distr
 
 ## 👨‍💻 Autor
 
-Creado por **[Tu Nombre]** con ❤️ para estudiantes de ciencias.
+Creado por **[Rodrigo (nocturne-cyberseucirty)]**
 
 ---
 
 ## 📧 Contacto & Soporte
 
-- **Issues**: [GitHub Issues](https://github.com/tuusuario/quimilopia/issues)
-- **Email**: tu@email.com
-- **Twitter**: [@tutwitter](https://twitter.com)
+- **Issues**: [GitHub Issues](https://github.com/nocturne-cybersecurity/quimilopia/issues)
+- **Email**: rodrigolopezp11@email.com
 
 ---
 
